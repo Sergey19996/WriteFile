@@ -9,6 +9,8 @@ using namespace std;
 class Point
 {
 public:
+	
+
 	Point()
 	{
 		coll=x = y = z = 0;
@@ -69,14 +71,30 @@ private:
 	int x;
 	int y;
 	int z;
+
+
 	bool coll;
 	bool counterTrue = true;
 	int counter = 0;
 protected:
 
-};
 
+
+	friend  ostream& operator <<(ostream& os, const Point& input);    //make it friend
+	friend  istream& operator >>(istream& is, Point& input);
+};
  
+ostream& operator <<(ostream& os,const Point& input)                //record data
+{
+	os << input.x << " " << input.y << " " << input.z;
+	return os;
+ }
+
+istream& operator >>(istream& is,  Point& input)              //get data
+{
+	is >> input.x >> input.y >> input.z;
+	return is;
+}
 
 int main()
 {
@@ -119,24 +137,42 @@ int main()
 	fout.close();*/
 
 
-	ifstream fin;
-	fin.open(path);
-	if (!fin.is_open())
-	{
-		cout << "Error open file! " << endl;
+	//ifstream fin;
+	//fin.open(path);
+	//if (!fin.is_open())
+	//{
+	//	cout << "Error open file! " << endl;
 
-	}
-	else
+	//}
+	//else
+	//{
+	//	cout << "File is Open" << endl;
+	//	while (fin.read((char*)&Clean, sizeof(test)))
+	//	{
+	//		Clean.Print();
+	//	}
+	//	
+	//}
+	//
+	//fin.close();
+
+
+
+	fstream fs;
+
+	fs.open(path, fstream::in | fstream::out | fstream::app);
+	if (!fs.is_open())
 	{
-		cout << "File is Open" << endl;
-		while (fin.read((char*)&Clean, sizeof(test)))
-		{
-			Clean.Print();
-		}
-		
+		cout << "error open file" << endl;
 	}
-	
-	fin.close();
+	else {
+		cout << "File is Open" << endl;
+		//fs << test << "\n";
+
+		fs >> Clean;
+		cout << Clean;
+	}
+	fs.close();
 
 	return 0;
 }
