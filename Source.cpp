@@ -1,178 +1,269 @@
-#include <iostream>
-#include <string>
-#include <fstream>
+#include <iostream> 
 
-
-using namespace std;
-
-
-class Point
+template<typename T>
+class List
 {
 public:
-	
+	List();
+	~List();
+	void pop_front();
+	void clear();
+	void push_back(T data);
+	int GetSize() { return Size; }
+	void push_front( T data);
+	void insert(T value, int index);
+	void removeAt(int index);
+	void Pop_Back();
 
-	Point()
+	T& operator[](const int index);
+
+
+
+
+private:
+
+
+	template<typename T>
+	class Node // узел
 	{
-		coll=x = y = z = 0;
+	public:
+		Node* pNext;
+		T data;
+
+		Node(T data = T(), Node* pNext = nullptr)   //pointer on next Node
+		{
+			this->data = data;
+			this->pNext = pNext;
+		}
 	};
 
-	Point(int x, int y, int z, bool collision)
-	{
 
-		this->x = x;
-		this->y = y;
-		this->z = z;
-		this->coll = collision;
-	}
+
+	int Size;
+	Node<T> *head;
 	
-	void Print()
-	{
-		cout << "X:= " << x << " " << "Y:== " << y <<"  "<< "Z:== " << z <<" " <<"Bool:= " << coll << endl;
-	}
-
-	 bool GetArray (int *Valuea, const int Size)
-	{
-		 if (counterTrue == true)
-		 {
-
-
-			 for (counter; counter < Size;)
-			 {
-				 int even = 0;
-
-				 x = Valuea[counter];
-				 counter++;
-				 even++;
-				 y = Valuea[counter];
-				 counter++;
-				 even++;
-				 z = Valuea[counter];
-				 counter++;
-				 even++;
-				coll = Valuea[counter];
-				 if (counter == Size-1)
-				 {
-					 counterTrue = false;
-					 counter = 0;
-					 return true;
-				 }
-				 if (even %3==0)
-				 {
-					 counter++;
-					 return true;
-				 }
-				 
-			 }
-			 
-		 }
-		 return false;
-	}
-private:
-	int x;
-	int y;
-	int z;
-
-
-	bool coll;
-	bool counterTrue = true;
-	int counter = 0;
-protected:
-
-
-
-	friend  ostream& operator <<(ostream& os, const Point& input);    //make it friend
-	friend  istream& operator >>(istream& is, Point& input);
 };
- 
-ostream& operator <<(ostream& os,const Point& input)                //record data
-{
-	os << input.x << " " << input.y << " " << input.z;
-	return os;
- }
 
-istream& operator >>(istream& is,  Point& input)              //get data
+template<typename T>
+List<T>::List()
 {
-	is >> input.x >> input.y >> input.z;
-	return is;
+	Size = 0;
+	head =nullptr;
+
+}
+template<typename T>
+List<T>::~List()
+{
+	clear();
+
 }
 
-int main()
+template<typename T>
+void List<T>::pop_front()
 {
-	const int Size = 20;
-	int  Arr[Size]
+	Node<T>* Temp = head;
+	head = head->pNext;
+
+	Size--;
+	delete Temp;
+
+}
+
+template<typename T>
+void List<T>::clear()
+{
+	while (Size!=0)
 	{
-		111,222,144,1,
-		111,654,113,0,
-		111,545,345,1,
-		141,465,523,0,
-		111,565,1543,1
+		Node<T>* Temp = head;
+		head = head->pNext;
 
-	};
-	Point test(432, 432, 234, true);
-
-	Point Clean;
-	//test.Print();
-	//test.GetArray(Arr,Size);
-	string path = "myfile.txt";
-	ofstream fout;                    //ofstream responds for write
+		Size--;
+		delete Temp;
+	}
 	
-	
-	/*fout.open(path, ofstream:: app);
 
-	if (!fout.is_open())
+}
+
+template<typename T>
+void List<T>::push_back(T data)
+{
+	if (head == nullptr)
 	{
-
-
-		cout << "error open file" << endl;
+	
+		head= new Node<T>(data);         //поинтер указывает на место в памяти класса, который хронит data и ссылку 
 	}
 	else
 	{
-		cout << "pass the number! " << endl;
-		while (test.GetArray(Arr, Size))
-		{
-			fout.write((char*)&test, sizeof(test));
+		Node<T>* current = this->head;         //We add adres from head to out new peremennaia
+		while (current->pNext !=nullptr)	   //so if we create something from this adress and than it's destroy 
+		{									   //the changes will be with our first file
+			current = current->pNext;
 		}
+		current->pNext = new Node<T>(data);        //create new dara on pnext
 		
 	}
-	fout.close();*/
+
+	Size++;
+}
+
+template<typename T>
+void List<T>::push_front( T data)
+{
+
+	Node<T>* current = new Node<T>(data);
+
+	current->pNext = head;
+	head = current;
+
+	Size++;
 
 
-	//ifstream fin;
-	//fin.open(path);
-	//if (!fin.is_open())
-	//{
-	//	cout << "Error open file! " << endl;
+}
 
-	//}
-	//else
-	//{
-	//	cout << "File is Open" << endl;
-	//	while (fin.read((char*)&Clean, sizeof(test)))
-	//	{
-	//		Clean.Print();
-	//	}
-	//	
-	//}
-	//
-	//fin.close();
+template<typename T>
+void List<T>::insert(T value, int index)
+{
 
-
-
-	fstream fs;
-
-	fs.open(path, fstream::in | fstream::out | fstream::app);
-	if (!fs.is_open())
+	int counter = 0;
+	Node<T>* current = this->head;
+	//Node<T>* change = new Node<T>(value);
+	
+	while (current != nullptr)
 	{
-		cout << "error open file" << endl;
-	}
-	else {
-		cout << "File is Open" << endl;
-		//fs << test << "\n";
+		if (counter == index-1)
+		{
+			//Node<T>* change = new Node<T>(value, current->pNext);
 
-		fs >> Clean;
-		cout << Clean;
+			
+
+			current->pNext = new Node<T>(value, current->pNext);
+			Size++;
+		}
+		current = current->pNext;
+		counter++;
 	}
-	fs.close();
+	
+}
+
+template<typename T>
+void List<T>::removeAt(int index)
+{
+	Node<T>* current = this->head;
+	int counter = 0;
+	while (current !=nullptr)
+	{
+		if (index ==0)
+		{
+			pop_front();
+		}
+
+		if (counter == index-1)
+		{
+			
+			Node<T>* previous = current;
+		
+			current = current->pNext;
+
+			previous->pNext = current->pNext;
+			Size--;
+			delete current;
+			break;
+		}
+
+		
+		counter++;
+
+		current = current->pNext;
+	}
+
+
+}
+
+template<typename T>
+void List<T>::Pop_Back()
+{
+	Node<T>* current = this->head;
+	while (current !=nullptr)
+	{
+		for (int i = 0; i < Size-2; i++)
+		{
+			current = current->pNext;
+		}
+		
+		delete current->pNext;
+		current->pNext = nullptr;
+		break;
+		Size--;
+
+
+	}
+}
+
+template<typename T>
+T& List<T>::operator[](const int index)
+{
+	int counter = 0;
+	Node<T>* current = this->head;
+	while (current !=nullptr)
+	{
+		if (counter == index)
+		{
+			return current->data;
+		}
+		current = current->pNext;
+		counter++;
+	}
+}
+
+
+
+int main()
+{
+
+	List < int> st;
+
+	st.push_back(5);
+	st.push_back(10);
+	st.push_back(12);
+
+
+	st.push_front(7);
+	//std::cout << st.GetSize() << std::endl;
+	for (int i = 0; i < st.GetSize(); i++)
+	{
+	
+		std::cout<<st[i] << std::endl;
+	}
+
+	st.insert(99, 1);
+	std::cout << std::endl;
+	for (int i = 0; i < st.GetSize(); i++)
+	{
+
+		std::cout << st[i] << std::endl;
+	}
+	st.removeAt(2);
+ 		std::cout << std::endl;
+		std::cout << std::endl;
+		std::cout << std::endl;
+	for (int i = 0; i < st.GetSize(); i++)
+	{
+
+		std::cout << st[i] << std::endl;
+	}
+
+	st.Pop_Back();
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
+	for (int i = 0; i < st.GetSize(); i++)
+	{
+
+		std::cout << st[i] << std::endl;
+	}
 
 	return 0;
 }

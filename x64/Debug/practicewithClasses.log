@@ -1,2 +1,3 @@
 ﻿  Source.cpp
+D:\C++\practicewithClasses\Source.cpp(216): warning C4715: List<int>::operator[]: значение возвращается не при всех путях выполнения
   practicewithClasses.vcxproj -> D:\C++\practicewithClasses\x64\Debug\practicewithClasses.exe
